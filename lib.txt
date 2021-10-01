@@ -1,0 +1,9 @@
+npm init
+npm install express
+npm i nodemon --save-dev
+npm i morgan --save-dev
+npm i express-handlebars
+npm i node-sass --save-dev
+npm i prettier lint-staged husky --save-dev
+npm i mongoose
+npm install mongoose-slug-generator
