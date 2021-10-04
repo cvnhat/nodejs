@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
+const mongooseDelete= require('mongoose-delete')
 
-mongoose.plugin(slug);
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
@@ -11,8 +11,13 @@ const Course = new Schema({
     slug: { type: String, slug: 'name', unique: true},
     image: { type: String },
     level: {type: String},
+    
 },{
     timestamps: true,
 });
+
+//Add plugin
+mongoose.plugin(slug);
+Course.plugin(mongooseDelete, {overrideMethods: 'all', deletedAt: true})
 
 module.exports = mongoose.model('Course', Course);

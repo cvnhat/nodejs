@@ -15,17 +15,48 @@ class CourseController {
 
     //[POST] cources/store
     store(req, res, next) {
-       const formData = req.body;
-       formData.image=`http://i3.ytimg.com/vi/${req.body.videoId}/maxresdefault.jpg`
-       console.log(formData.image)
-       console.log(formData.name)
-       console.log(formData.videoId)
-       console.log(formData.description)
-       const course=new Course(formData)
+       req.body.image=`http://i3.ytimg.com/vi/${req.body.videoId}/maxresdefault.jpg`
+       const course=new Course(req.body)
        course.save()
-        .then(() => res.redirect('/'))
+        .then(() => res.redirect('/me/stored/courses'))
         .catch(error => {})
     }
+    //[GET] /courses/:id/edit
+    edit(req, res, next) {
+        Course.findById(req.params.id).lean()
+            .then(course => res.render('courses/edit', {course}))
+            .catch(next)
+        
+    }
+    //[PUT] /courses/:id
+    update(req, res, next) {
+        Course.updateOne({_id: req.params.id}, req.body)
+            .then(() => res.redirect('/me/stored/courses'))
+            .catch(next)
+        
+    }
+    //[DELETE] /cources/:id
+    destroy(req, res, next) {
+        Course.delete({_id: req.params.id})
+        .then(() => res.redirect('back'))
+        .catch(next)
+    }
+
+    //[DELETE] /cources/:id/force
+    forceDestroy(req, res, next) {
+        Course.deleteOne({_id: req.params.id})
+        .then(() => res.redirect('back'))
+        .catch(next)
+    }
+
+    //[PATCH] /cources/:id/restore
+    restore(req, res, next) {
+        Course.restore({_id: req.params.id})
+        .then(() => res.redirect('back'))
+        .catch(next)
+    }
+
+
 }
 
 module.exports = new CourseController();
